@@ -1,0 +1,87 @@
+# ardiuno
+code of project
+int right_sensor = 12; // Right sensor pin
+int left_sensor = 4;   // Left sensor pin
+
+int RightMotorForward = 7; // Right motor forward pin
+int RightMotorReverse = 6; // Right motor reverse pin
+int LeftMotorForward = 9;  // Left motor forward pin
+int LeftMotorReverse = 8;  // Left motor reverse pin
+
+int right_val, left_val; // Variables to store sensor values
+
+void setup() {
+  // Sensor configurations
+  pinMode(right_sensor, INPUT);  // Right sensor as input
+  pinMode(left_sensor, INPUT);   // Left sensor as input
+
+  // Motor control configurations
+  pinMode(RightMotorForward, OUTPUT);
+  pinMode(RightMotorReverse, OUTPUT);
+  pinMode(LeftMotorForward, OUTPUT);
+  pinMode(LeftMotorReverse, OUTPUT);
+
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read sensor values
+  right_val = digitalRead(right_sensor);
+  left_val = digitalRead(left_sensor);
+
+  // Debugging: Print sensor values
+  Serial.print("Right Sensor: ");
+  Serial.print(right_val);
+  Serial.print(" | Left Sensor: ");
+  Serial.println(left_val);
+
+  // Condition: Light falls in front of the robot
+  if ((right_val == HIGH) && (left_val == HIGH)) {
+    Forward();
+  }
+  // Condition: Light falls on the right side
+  else if ((right_val == HIGH) && (left_val == LOW)) {
+    Right();
+  }
+  // Condition: Light falls on the left side
+  else if ((right_val == LOW) && (left_val == HIGH)) {
+    Left();
+  }
+  // Condition: No light detected
+  else if ((right_val == LOW) && (left_val == LOW)) {
+    RobotStop();
+  }
+}
+
+// Function to move the robot forward
+void Forward() {
+  digitalWrite(RightMotorForward, HIGH);
+  digitalWrite(RightMotorReverse, LOW);
+  digitalWrite(LeftMotorForward, HIGH);
+  digitalWrite(LeftMotorReverse, LOW);
+}
+
+// Function to turn the robot right
+void Right() {
+  digitalWrite(RightMotorForward, LOW);
+  digitalWrite(RightMotorReverse, LOW);
+  digitalWrite(LeftMotorForward, HIGH);
+  digitalWrite(LeftMotorReverse, LOW);
+}
+
+// Function to turn the robot left
+void Left() {
+  digitalWrite(RightMotorForward, HIGH);
+  digitalWrite(RightMotorReverse, LOW);
+  digitalWrite(LeftMotorForward, LOW);
+  digitalWrite(LeftMotorReverse, LOW);
+}
+
+// Function to stop the robot
+void RobotStop() {
+  digitalWrite(RightMotorForward, LOW);
+  digitalWrite(RightMotorReverse, LOW);
+  digitalWrite(LeftMotorForward, LOW);
+  digitalWrite(LeftMotorReverse, LOW);
+}

@@ -1,2 +1,0 @@
-# ardiuno
-code of project
